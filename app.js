@@ -19,6 +19,7 @@ app.use(cookieparser())
 app.use(bodyParser.json())
 
 
+
 app.use('/user', userRoute)
 app.use('/otp',regOtp)
 app.use('/email',emailVerify)
@@ -32,7 +33,7 @@ mongoose.connect(DB,{
 }).catch((err)=>{
     console.log(err);
 });
-
+ console.log('vishal');
 
 
     module.exports = app
