@@ -7,17 +7,17 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const cookie = require('cookie-parser')
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 
 // const fast2sms = require('fast-two-sms')
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'am5932809@gmail.com',
-        pass: 'bhzboedeiqshfdww'
-    }
-})
+// const transporter = nodemailer.createTransport({
+//     service: 'gmail',
+//     auth: {
+//         user: 'am5932809@gmail.com',
+//         pass: 'bhzboedeiqshfdww'
+//     }
+// })
 
 
 
@@ -50,7 +50,7 @@ router.post('/signup', async (req, res) => {
                 name: req.body.name,
                 surname: req.body.surname,
                 panNumber: hash,
-                email: req.body.email,
+                dateOfBirth:req.body.dateOfBirth,
                 pinNumber: req.body.pinNumber,
                 ConfirmPinNumber: req.body.ConfirmPinNumber,
                 pinToken: crypto.randomBytes(64).toString('hex'),
@@ -59,28 +59,31 @@ router.post('/signup', async (req, res) => {
 
 
             user.save()
-
-            var mailOptions = {
-                from: 'am5932809@gmail.com',
-                to: user.email,
-                subject: 'Pin for login',
-                text: `your pin for login is ${user.pinNumber}`
-                //     html:`
-                //     <h2>${user.name}!thanks for registering on our app
-                //     <a href = "http://${req.headers.host}/user/verify-email?token=${user.pinToken}">verify your email</a>`
-                //   }
-            }
-            transporter.sendMail(mailOptions, function (err, info) {
-                if (err) {
-                    console.log(err);
-                }
-                else {
-                    res.send({
-                        msg: "please check your gmail account for pin",
-                        data: user
-                    })
-                }
+            res.status(200).json({
+               msg:user
             })
+
+            // var mailOptions = {
+            //     from: 'am5932809@gmail.com',
+            //     to: user.email,
+            //     subject: 'Pin for login',
+            //     text: `your pin for login is ${user.pinNumber}`
+            //     //     html:`
+            //     //     <h2>${user.name}!thanks for registering on our app
+            //     //     <a href = "http://${req.headers.host}/user/verify-email?token=${user.pinToken}">verify your email</a>`
+            //     //   }
+            // }
+            // transporter.sendMail(mailOptions, function (err, info) {
+            //     if (err) {
+            //         console.log(err);
+            //     }
+            //     else {
+            //         res.send({
+            //             msg: "please check your gmail account for pin",
+            //             data: user
+            //         })
+            //     }
+            // })
 
 
 

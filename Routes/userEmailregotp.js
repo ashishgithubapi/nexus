@@ -1,10 +1,15 @@
 const express = require('express');
+require('dotenv').config()
 
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const jwt = require('jsonwebtoken')
-const nodemailer = require('nodemailer');
+const Sib = require("sib-api-v3-sdk")
+const client = Sib.ApiClient.instance
+const apiKey = client.authentications['api-key']
+apiKey.apiKey = process.env.API_KEY
+// const nodemailer = require('nodemailer');
 
 
 const otpGenerator = require('otp-generator');
@@ -14,13 +19,19 @@ const otpGenerator = require('otp-generator');
 
 const eamilregOtp = require('../Models/emailotpregModel')
 const EOTP = require('../Models/emailotpModel')
-const transporter = nodemailer.createTransport({
-    service:'gmail',
-    auth:{
-        user:'am5932809@gmail.com',
-        pass:'bhzboedeiqshfdww'
-    }
-})
+// const transporter = nodemailer.createTransport({
+//     host: 'smtp.office365.com',
+//     port: 587,
+//     secure:false, // true for 465, false for other ports
+//     auth:{
+//         user:'noreply@nexustradingworld.com',
+//         pass:'tkljpvcdpxytjnrg'
+//     },
+//     tls: {
+//         // do not fail on invalid certs
+//         rejectUnauthorized: false
+//     }
+// })
 
 router.post('/emailotp', async (req, res) => {
      const User = await eamilregOtp.findOne({
@@ -45,14 +56,27 @@ router.post('/emailotp', async (req, res) => {
     res.status(200).json({
         result: email_obj
     })
-    var mailOptions = {
-        from:'am5932809@gmail.com',
-        to:email_obj.email,
-        subject:'email verification',
-        text: `your otp is ${otp_number_genrate}`
+    const tranEmailApi = new Sib.TransactionalEmailsApi()
+    const sender = {
+        email: 'noreply@nexustradingworld.com',
+        Name:'Nexus'
     }
-     
-      transporter.sendMail(mailOptions)
+    
+    const recievers = [{
+        email:email_id
+    }]
+    
+    tranEmailApi.sendTransacEmail({
+        sender,
+        to:recievers,
+        subject:'email otp verification',
+        textContent:`your otp is ${otp_number_genrate}`
+    })
+    .then(console.log)
+    .catch(console.log)    //   .then(() => console.log('success', email_obj))
+    // .catch(error => console.error('There was an error while sending the email:', error));
+
+
      
 })
 
