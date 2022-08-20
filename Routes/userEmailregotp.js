@@ -59,7 +59,7 @@ router.post('/emailotp', async (req, res) => {
     const tranEmailApi = new Sib.TransactionalEmailsApi()
     const sender = {
         email: 'noreply@nexustradingworld.com',
-        Name:'Nexus'
+        
     }
     
     const recievers = [{
