@@ -76,8 +76,7 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({
             pinNumber: req.body.pinNumber,
         });
-
-        User.find(req.body.pinNumber)
+        
 
        console.log(user);
         // console.log(user.ConfirmPinNumber);
@@ -97,6 +96,11 @@ router.post('/login', async (req, res) => {
             });
 
         }
+
+        user.isVerified = true
+        user.pinToken = null
+        user.save()
+
         
 
 
