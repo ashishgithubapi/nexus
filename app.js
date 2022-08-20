@@ -33,7 +33,6 @@ mongoose.connect(DB,{
 }).catch((err)=>{
     console.log(err);
 });
- console.log('vishal');
 
 
     module.exports = app
