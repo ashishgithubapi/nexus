@@ -14,7 +14,7 @@ router.post('/signup', async (req, res) => {
         const { name, surname, dateOfBirth, panNumber, pinNumber, ConfirmPinNumber } = req.body;
 
         // Validate user input
-        if (!(name && surname && dateOfBirth && panNumber && pinNumber && ConfirmPinNumber)) {
+        if (!(name && surname && dateOfBirth && panNumber && pinNumber && ConfirmPinNumber  )) {
             res.status(400).send("All input is required");
         }
 
@@ -38,7 +38,8 @@ router.post('/signup', async (req, res) => {
             dateOfBirth,
             pinNumber, // sanitize: convert email to lowercase
             panNumber:encryptedPan,
-            ConfirmPinNumber
+            ConfirmPinNumber,
+            isVerified:false
         });
 
         console.log(user);
@@ -98,7 +99,6 @@ router.post('/login', async (req, res) => {
         }
 
         user.isVerified = true
-        user.pinToken = null
         user.save()
 
         
