@@ -42,7 +42,6 @@ router.post('/signup', async (req, res) => {
             isVerified:false
         });
 
-        console.log(user);
 
         // Create token
         const token = jwt.sign(
@@ -56,7 +55,9 @@ router.post('/signup', async (req, res) => {
         user.token = token;
 
         // return new User
-        res.status(201).json(user);
+        res.status(201).json({
+            msg:'user registration successful'
+        });
     } catch (err) {
         console.log(err);
     }
