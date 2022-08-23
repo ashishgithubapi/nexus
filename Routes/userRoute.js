@@ -80,11 +80,9 @@ router.post('/login', async (req, res) => {
         });
         
 
-       console.log(user);
         // console.log(user.ConfirmPinNumber);
        const conPin = user.ConfirmPinNumber
 
-       console.log(conPin);
 
          if (!(pinNumber)) {
             res.status(400).send("All input is required");
@@ -92,7 +90,7 @@ router.post('/login', async (req, res) => {
 
         if(pinNumber===conPin){
             res.status(400).json({
-                pinNumber:pinNumber,
+            
                 msg:'login success'
 
             });
