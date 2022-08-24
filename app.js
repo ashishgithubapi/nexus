@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors')
 const cookieparser = require('cookie-parser')
-const account = require('./Routes/account')
+// const account = require('./Routes/account')
 const userRoute = require('./Routes/userRoute')
 const regOtp = require('./Routes/userRegotp')
 const emailVerify = require('./Routes/userEmailregotp')
@@ -24,7 +24,7 @@ app.use(bodyParser.json())
 app.use('/user', userRoute)
 app.use('/otp',regOtp)
 app.use('/email',emailVerify)
-app.use('/kite',account)
+// app.use('/kite',account)
 
 mongoose.connect(DB,{
     useNewUrlParser: true,
