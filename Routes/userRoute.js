@@ -14,8 +14,10 @@ router.post('/signup', async (req, res) => {
         const { name, surname, dateOfBirth, panNumber, pinNumber, ConfirmPinNumber } = req.body;
 
         // Validate user input
-        if (!(name && surname && dateOfBirth && panNumber && pinNumber && ConfirmPinNumber  )) {
-            res.status(400).send("All input is required");
+        if (!(name && surname && dateOfBirth && panNumber && pinNumber && ConfirmPinNumber)) {
+            res.status(400).json({
+                message:'please fill given field'
+            });
         }
 
         // check if user already exist
@@ -24,7 +26,7 @@ router.post('/signup', async (req, res) => {
 
         if (oldUser) {
             return res.status(409).json({
-                msg: 'use is already registered'
+                msg: 'user is already registered'
             });
         }
 
@@ -37,9 +39,9 @@ router.post('/signup', async (req, res) => {
             surname,
             dateOfBirth,
             pinNumber, // sanitize: convert email to lowercase
-            panNumber:encryptedPan,
+            panNumber: encryptedPan,
             ConfirmPinNumber,
-            isVerified:false
+            isVerified: false
         });
 
 
@@ -56,7 +58,7 @@ router.post('/signup', async (req, res) => {
 
         // return new User
         res.status(201).json({
-            msg:'user registration successful'
+            msg: 'user registration successful'
         });
     } catch (err) {
         console.log(err);
@@ -65,69 +67,89 @@ router.post('/signup', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-    // Our login logic starts here
-    try {
-        // Get user input
-        const { pinNumber } = req.body;
-
-        // Validate user input
-        // if (!(pinNumber)) {
-        //     res.status(400).send("All input is required");
-        // }
-        // Validate if user exist in our database
-        const user = await User.findOne({
-            pinNumber: req.body.pinNumber,
-        });
-        
-
-        // console.log(user.ConfirmPinNumber);
-       const conPin = user.ConfirmPinNumber
 
 
-         if (!(pinNumber)) {
-            res.status(400).send("All input is required");
-        }
+    const user = await User.findOne({
+        pinNumber: req.body.pinNumber,
+    });
 
-        if(pinNumber===conPin){
-            res.status(400).json({
-            
-                msg:'login success'
-
-            });
-
-        }
-
-        user.isVerified = true
-        user.save()
-
-        
+  
 
 
-
-
-        // if (user && (await bcrypt.compare(pinNumber, user.pinNumber))) {
-        //     // Create token
-        //     const token = jwt.sign(
-        //         { user_id: user._id, email },
-        //         process.env.TOKEN_KEY,
-        //         {
-        //             expiresIn: "2h",
-        //         }
-        //     );
-
-        //     // save user token
-        //     user.token = token;
-
-        //     // user
-        //     res.status(200).json(user);
-        // }
-        // res.status(400).send("Invalid Credentials");
-    } catch (err) {
-        res.status(400).json({
-            data:'invalid pin'
-        });
- 
+    if(user){
+        res.status(200).json({
+            message:'login successfull'
+        })
     }
+     else if(user===null){
+        res.status(401).json({
+            error:'enter valid pin'
+        })     }
+
+
+    // // Our login logic starts here
+    // try {
+    //     // Get user input
+    //     const { pinNumber } = req.body;
+
+    //     // Validate user input
+    //     // if (!(pinNumber)) {
+    //     //     res.status(400).send("All input is required");
+    //     // }
+    //     // Validate if user exist in our database
+    //     const user = await User.findOne({
+    //         pinNumber: req.body.pinNumber,
+    //     });
+
+
+    //     // console.log(user.ConfirmPinNumber);
+    //    const conPin = user.ConfirmPinNumber
+
+
+    //      if (!(pinNumber)) {
+    //         res.status(400).send("All input is required");
+    //     }
+
+    //     if(pinNumber===conPin){
+    //         res.status(400).json({
+
+    //             msg:'login success'
+
+    //         });
+
+    //     }
+
+    //     user.isVerified = true
+    //     user.save()
+
+
+
+
+
+
+    //     // if (user && (await bcrypt.compare(pinNumber, user.pinNumber))) {
+    //     //     // Create token
+    //     //     const token = jwt.sign(
+    //     //         { user_id: user._id, email },
+    //     //         process.env.TOKEN_KEY,
+    //     //         {
+    //     //             expiresIn: "2h",
+    //     //         }
+    //     //     );
+
+    //     //     // save user token
+    //     //     user.token = token;
+
+    //     //     // user
+    //     //     res.status(200).json(user);
+    //     // }
+    //     // res.status(400).send("Invalid Credentials");
+    // } catch (err) {
+    //     res.status(400).json({
+    //         data:'invalid pin'
+    //     });
+
+    // }
 })
 
 
