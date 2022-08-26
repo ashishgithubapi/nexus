@@ -7,7 +7,7 @@ require('dotenv').config()
 
 const jwt = require('jsonwebtoken')
 
-router.post('/signup', async (req, res) => {
+router.post('/reg', async (req, res) => {
     // Our register logic starts here
     try {
         // Get user input
