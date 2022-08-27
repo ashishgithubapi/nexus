@@ -8,61 +8,100 @@ require('dotenv').config()
 const jwt = require('jsonwebtoken')
 
 router.post('/reg', async (req, res) => {
-    // Our register logic starts here
-    try {
-        // Get user input
-        const { name, surname, dateOfBirth, panNumber, pinNumber, ConfirmPinNumber } = req.body;
 
-        // Validate user input
-        if (!(name && surname && dateOfBirth && panNumber && pinNumber && ConfirmPinNumber)) {
-            res.status(400).json({
-                message:'please fill given field'
-            });
-        }
+    const { name, surname, dateOfBirth, panNumber, pinNumber, ConfirmPinNumber } = req.body;
 
-        // check if user already exist
-        // Validate if user exist in our database
-        const oldUser = await User.findOne({ pinNumber });
-
-        if (oldUser) {
-            return res.status(409).json({
-                msg: 'user is already registered'
-            });
-        }
-
-        //Encrypt user password
-        encryptedPan = await bcrypt.hash(panNumber, 10);
-
-        // Create user in our database
-        const user = await User.create({
-            name,
-            surname,
-            dateOfBirth,
-            pinNumber, // sanitize: convert email to lowercase
-            panNumber: encryptedPan,
-            ConfirmPinNumber,
-            isVerified: false
+    // Validate user input
+    if (!(name && surname && dateOfBirth && panNumber && pinNumber && ConfirmPinNumber)) {
+        res.status(400).json({
+            message: 'please fill given field'
         });
-
-
-        // Create token
-        const token = jwt.sign(
-            { user_id: user._id, pinNumber },
-            process.env.TOKEN_KEY,
-            {
-                expiresIn: "2h",
-            }
-        );
-        // save user token
-        user.token = token;
-
-        // return new User
-        res.status(201).json({
-            msg: 'user registration successful'
-        });
-    } catch (err) {
-        console.log(err);
     }
+
+    const oldUser = await User.findOne({ pinNumber });
+
+
+    if (oldUser) {
+        return res.status(409).json({
+            msg: 'user is already registered'
+        });
+    }
+
+
+    // Create user in our database
+    const user = await User.create({
+        name,
+        surname,
+        dateOfBirth,
+        pinNumber, // sanitize: convert email to lowercase
+        panNumber,
+        ConfirmPinNumber,
+        isVerified: false
+    });
+
+
+    res.status(201).json({
+        msg: 'user registration successful'
+    });
+
+
+
+
+    // Our register logic starts here
+    //     try {
+    //         // Get user input
+    //         const { name, surname, dateOfBirth, panNumber, pinNumber, ConfirmPinNumber } = req.body;
+
+    //         // Validate user input
+    //         if (!(name && surname && dateOfBirth && panNumber && pinNumber && ConfirmPinNumber)) {
+    //             res.status(400).json({
+    //                 message:'please fill given field'
+    //             });
+    //         }
+
+    //         // check if user already exist
+    //         // Validate if user exist in our database
+    //         const oldUser = await User.findOne({ pinNumber });
+
+    //         if (oldUser) {
+    //             return res.status(409).json({
+    //                 msg: 'user is already registered'
+    //             });
+    //         }
+
+    //         //Encrypt user password
+    //         encryptedPan = await bcrypt.hash(panNumber, 10);
+
+    //         // Create user in our database
+    //         const user = await User.create({
+    //             name,
+    //             surname,
+    //             dateOfBirth,
+    //             pinNumber, // sanitize: convert email to lowercase
+    //             panNumber: encryptedPan,
+    //             ConfirmPinNumber,
+    //             isVerified: false
+    //         });
+
+
+    //         // Create token
+    //         const token = jwt.sign(
+    //             { user_id: user._id, pinNumber },
+    //             process.env.TOKEN_KEY,
+    //             {
+    //                 expiresIn: "2h",
+    //             }
+    //         );
+    //         // save user token
+    //         user.token = token;
+
+    //         // return new User
+    //         res.status(201).json({
+    //             msg: 'user registration successful'
+    //         });
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
 
 })
 
@@ -73,18 +112,19 @@ router.post('/login', async (req, res) => {
         pinNumber: req.body.pinNumber,
     });
 
-  
 
 
-    if(user){
+
+    if (user) {
         res.status(200).json({
-            message:'login successfull'
+            message: 'login successfull'
         })
     }
-     else if(user===null){
+    else if (user === null) {
         res.status(401).json({
-            error:'enter valid pin'
-        })     }
+            error: 'enter valid pin'
+        })
+    }
 
 
     // // Our login logic starts here
