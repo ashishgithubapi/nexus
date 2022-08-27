@@ -9,6 +9,18 @@ const jwt = require('jsonwebtoken')
 
 router.post('/reg', async (req, res) => {
 
+    const oldUser = await User.findOne({ pinNumber:req.body.pinNumber });
+
+
+    if (oldUser) {
+        return res.status(201).json({
+            msg: 'user is register'
+        });
+    }
+
+
+
+
     const { name, surname, dateOfBirth, panNumber, pinNumber, ConfirmPinNumber } = req.body;
 
     // Validate user input
@@ -18,22 +30,9 @@ router.post('/reg', async (req, res) => {
         });
     }
 
-    return res.status(200).json({
-        message: 'success'
-    });
-/*
-    const oldUser = await User.findOne({ pinNumber });
-
-
-    if (oldUser) {
-        return res.status(201).json({
-            msg: 'user is already there'
-        });
-    }
-
 
     // Create user in our database
-    const user = await User.create({
+    const user = await new User({
         name,
         surname,
         dateOfBirth,
@@ -43,69 +42,13 @@ router.post('/reg', async (req, res) => {
         isVerified: false
     });
 
+    user.save()
 
-   return res.status(200).json({
-        msg: 'user registration successful'
+
+    return res.status(200).json({
+        message: 'success'
     });
 
-*/
-
-
-    // Our register logic starts here
-    //     try {
-    //         // Get user input
-    //         const { name, surname, dateOfBirth, panNumber, pinNumber, ConfirmPinNumber } = req.body;
-
-    //         // Validate user input
-    //         if (!(name && surname && dateOfBirth && panNumber && pinNumber && ConfirmPinNumber)) {
-    //             res.status(400).json({
-    //                 message:'please fill given field'
-    //             });
-    //         }
-
-    //         // check if user already exist
-    //         // Validate if user exist in our database
-    //         const oldUser = await User.findOne({ pinNumber });
-
-    //         if (oldUser) {
-    //             return res.status(409).json({
-    //                 msg: 'user is already registered'
-    //             });
-    //         }
-
-    //         //Encrypt user password
-    //         encryptedPan = await bcrypt.hash(panNumber, 10);
-
-    //         // Create user in our database
-    //         const user = await User.create({
-    //             name,
-    //             surname,
-    //             dateOfBirth,
-    //             pinNumber, // sanitize: convert email to lowercase
-    //             panNumber: encryptedPan,
-    //             ConfirmPinNumber,
-    //             isVerified: false
-    //         });
-
-
-    //         // Create token
-    //         const token = jwt.sign(
-    //             { user_id: user._id, pinNumber },
-    //             process.env.TOKEN_KEY,
-    //             {
-    //                 expiresIn: "2h",
-    //             }
-    //         );
-    //         // save user token
-    //         user.token = token;
-
-    //         // return new User
-    //         res.status(201).json({
-    //             msg: 'user registration successful'
-    //         });
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
 
 })
 

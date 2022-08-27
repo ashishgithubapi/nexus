@@ -4,8 +4,7 @@ const userSchema = new mongoose.Schema({
     surname: String,
     dateOfBirth: {
         type: Date,
-        required: true,
-        trim: true,
+      
     },
     panNumber: String,
     pinNumber: String,
