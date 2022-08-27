@@ -23,7 +23,7 @@ router.post('/reg', async (req, res) => {
 
     if (oldUser) {
         return res.status(409).json({
-            msg: 'user is already registeredddd'
+            msg: 'user is already registereddd'
         });
     }
 
