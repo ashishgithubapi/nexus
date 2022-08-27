@@ -13,7 +13,7 @@ router.post('/reg', async (req, res) => {
 
     // Validate user input
     if (!(name && surname && dateOfBirth && panNumber && pinNumber && ConfirmPinNumber)) {
-       return res.send({
+       return res.status(200).json({
             message: 'please fill given field'
         });
     }
@@ -22,8 +22,8 @@ router.post('/reg', async (req, res) => {
 
 
     if (oldUser) {
-        return res.send({
-            msg: 'user is already registereddd'
+        return res.status(201).json({
+            msg: 'user is already there'
         });
     }
 
@@ -40,7 +40,7 @@ router.post('/reg', async (req, res) => {
     });
 
 
-   return res.send({
+   return res.status(200).json({
         msg: 'user registration successful'
     });
 
