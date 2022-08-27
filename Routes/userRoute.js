@@ -18,6 +18,10 @@ router.post('/reg', async (req, res) => {
         });
     }
 
+    return res.status(200).json({
+        message: 'success'
+    });
+/*
     const oldUser = await User.findOne({ pinNumber });
 
 
@@ -44,7 +48,7 @@ router.post('/reg', async (req, res) => {
         msg: 'user registration successful'
     });
 
-
+*/
 
 
     // Our register logic starts here
