@@ -34,7 +34,7 @@ const EOTP = require('../Models/emailotpModel')
 // })
 
 router.post('/emailotp', async (req, res) => {
-     const User = await eamilregOtp.findOne({
+    const User = await eamilregOtp.findOne({
         email: req.body.email,
     });
 
@@ -59,43 +59,50 @@ router.post('/emailotp', async (req, res) => {
     const tranEmailApi = new Sib.TransactionalEmailsApi()
     const sender = {
         email: 'noreply@nexustradingworld.com',
-        
+
     }
-    
+
     const recievers = [{
-        email:email_id
+        email: email_id
     }]
-    
+
     tranEmailApi.sendTransacEmail({
         sender,
-        to:recievers,
-        subject:'email otp verification',
-        textContent:`
-         <img src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOyCtPSy5vZ6NNKe6nmW5aEAWDfv2R3bV72g&usqp=CAU" style="border-radius: 70%; height:90px;width:90px"><br>
+        to: recievers,
+        subject: 'email otp verification',
+        textContent: `
 
-         dear user please use ${otp_number_genrate} as your one time password (OTP) to log into your nexus trade account<br>
-         this password is only valid for 30 minutes<br>
-         for security reason, please do not share this otp with anyone
+        <img src = "https://i.ibb.co/bLVDffB/TRADING.png" style=" height:100px;width:200px"><br>
+
+        <b> Dear user please use ${otp_number_genrate} as your one time password (OTP) to log into your nexus trade account
+         this password is only valid for 30 minutes.for security reason, please do not share this otp with anyone
+         </b> 
+
+         <b>
+         GOT QUESTION??
+         Then please reach out to us on,
+         <a href="https://www.nexustradingworld.com/">Nexus Team!</a>
+         </b>
          `
     })
-    .then(console.log)
-    .catch(console.log)    //   .then(() => console.log('success', email_obj))
+        .then(console.log)
+        .catch(console.log)    //   .then(() => console.log('success', email_obj))
     // .catch(error => console.error('There was an error while sending the email:', error));
 
 
-     
+
 })
 
-router.post('/emailverifyotp',async(req,res)=>{
+router.post('/emailverifyotp', async (req, res) => {
 
     console.log('ashish');
     const otpHolder = await EOTP.find({
         email: req.body.email
     });
 
-      console.log("this is what we want"+otpHolder);
+    console.log("this is what we want" + otpHolder);
 
-      if (otpHolder.length == 0) return res.status(201).send({
+    if (otpHolder.length == 0) return res.status(201).send({
         message: "Please enter valid OTP",
         err: true,
         data: []
@@ -104,7 +111,7 @@ router.post('/emailverifyotp',async(req,res)=>{
     //   console.log(rightOtpFind+"otpfind");
     //   console.log(req.body.otp+" yeh body me otp hai");
     const validUser = await bcrypt.compare(req.body.otp, rightOtpFind.otp);
-      console.log(validUser+"valid aaya");
+    console.log(validUser + "valid aaya");
 
     if (rightOtpFind.email === req.body.email && validUser) {
 
@@ -120,7 +127,7 @@ router.post('/emailverifyotp',async(req,res)=>{
                 expiresIn: "24h"
             }
         );
-      
+
         return res.status(200).send({
             message: "verify otp successful",
 
@@ -137,7 +144,7 @@ router.post('/emailverifyotp',async(req,res)=>{
             data: []
         })
     }
-    
+
 })
 
 

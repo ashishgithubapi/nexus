@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
     panNumber: String,
     pinNumber: String,
     ConfirmPinNumber: String,
-    isVerified: Boolean
+    isVerified: Boolean,
+    
 
 })
 

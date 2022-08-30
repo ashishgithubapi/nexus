@@ -87,11 +87,20 @@ router.post('/login', async (req, res) => {
     });
 
 
+            const token = jwt.sign(
+                { user_pin: user.pinNumber },
+                process.env.TOKEN_KEY,
+                {
+                    expiresIn: "2h",
+                }
+            );
 
+            user.token = token
 
     if (user) {
         res.status(200).json({
-            message: 'login successfull'
+            message: 'login successfull',
+            token: token
         })
     }
     else if (user === null) {
