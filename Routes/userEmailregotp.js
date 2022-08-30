@@ -70,7 +70,13 @@ router.post('/emailotp', async (req, res) => {
         sender,
         to:recievers,
         subject:'email otp verification',
-        textContent:`your otp is ${otp_number_genrate}`
+        textContent:`
+         <img src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOyCtPSy5vZ6NNKe6nmW5aEAWDfv2R3bV72g&usqp=CAU" style="border-radius: 70%; height:90px;width:90px"><br>
+
+         dear user please use ${otp_number_genrate} as your one time password (OTP) to log into your nexus trade account<br>
+         this password is only valid for 30 minutes<br>
+         for security reason, please do not share this otp with anyone
+         `
     })
     .then(console.log)
     .catch(console.log)    //   .then(() => console.log('success', email_obj))

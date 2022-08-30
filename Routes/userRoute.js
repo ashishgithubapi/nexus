@@ -9,45 +9,72 @@ const jwt = require('jsonwebtoken')
 
 router.post('/reg', async (req, res) => {
 
-    const oldUser = await User.findOne({ pinNumber:req.body.pinNumber });
-
+    const oldUser = await User.findOne({ pinNumber: req.body.pinNumber });
 
     if (oldUser) {
         return res.status(201).json({
-            msg: 'user is register'
+            msg: 'user is registered'
         });
     }
 
+    else {
 
-
-
-    const { name, surname, dateOfBirth, panNumber, pinNumber, ConfirmPinNumber } = req.body;
-
-    // Validate user input
-    if (!(name && surname && dateOfBirth && panNumber && pinNumber && ConfirmPinNumber)) {
-       return res.status(200).json({
-            message: 'please fill given field'
+        const user = await new User({
+            name:req.body.name,
+            surname:req.body.surname,
+            dateOfBirth:req.body.dateOfBirth,
+            pinNumber:req.body.pinNumber, // sanitize: convert email to lowercase
+            panNumber:req.body.panNumber,
+            ConfirmPinNumber:req.body.ConfirmPinNumber,
+            isVerified: false
         });
+
+        user.save()
+
+        res.status(200).json({
+            msg: 'registration successfull'
+        })
+
     }
+    // const oldUser = await User.findOne({ pinNumber:req.body.pinNumber });
 
 
-    // Create user in our database
-    const user = await new User({
-        name,
-        surname,
-        dateOfBirth,
-        pinNumber, // sanitize: convert email to lowercase
-        panNumber,
-        ConfirmPinNumber,
-        isVerified: false
-    });
-
-    user.save()
+    // if (oldUser) {
+    //     return res.status(201).json({
+    //         msg: 'user is register'
+    //     });
+    // }
 
 
-    return res.status(200).json({
-        message: 'success'
-    });
+
+
+    // const { name, surname, dateOfBirth, panNumber, pinNumber, ConfirmPinNumber } = req.body;
+
+    // // Validate user input
+    // if (!(name && surname && dateOfBirth && panNumber && pinNumber && ConfirmPinNumber)) {
+    //    return res.status(200).json({
+    //         message: 'please fill given field'
+    //     });
+    // }
+
+
+    // // Create user in our database
+    // const user = await new User({
+    //     name,
+    //     surname,
+    //     dateOfBirth,
+    //     pinNumber, // sanitize: convert email to lowercase
+    //     panNumber,
+    //     ConfirmPinNumber,
+    //     isVerified: false
+    // });
+
+    // user.save()
+
+
+    // return res.status(200).json({
+    //     message: 'success'
+    // });
 
 
 })
